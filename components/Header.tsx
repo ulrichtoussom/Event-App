@@ -98,16 +98,27 @@ export default function Header() {
                         {user ?
                             (
                                 <div className="flex items-center gap-4">
-                                    
-                                    {user && (
-                                            <Link 
-                                                href="/events/new" 
-                                                className="mr-4 text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition"
-                                            >
-                                                + Proposer
-                                            </Link>
+                                    {/* BOUTON ADMIN : Visible uniquement pour le rôle admin */}
+                                    {role === 'admin' && (
+                                        <Link 
+                                            href="/admin/dashboard" 
+                                            className="text-xs font-bold bg-red-100 text-red-700 px-3 py-1 rounded-full border border-red-200 hover:bg-red-200 transition"
+                                        >
+                                            🛡️ Admin
+                                        </Link>
                                     )}
-                                    <UserNav user={user} />
+
+                                    {/* Ton bouton proposer existant (masqué pour l'admin si tu veux) */}
+                                    {role !== 'admin' && (
+                                        <Link 
+                                            href="/events/new" 
+                                            className="text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition"
+                                        >
+                                            + Proposer
+                                        </Link>
+                                    )}
+                                    
+                                    <UserNav user={user} role={role} />
                                 </div>
                                 
                             ):
