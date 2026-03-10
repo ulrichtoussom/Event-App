@@ -1,11 +1,12 @@
-import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
+import { createClient } from '@/lib/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link'
 
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // 1. Récupérer l'événement spécifique depuis Supabases
 
+  const supabase = await createClient()
   const { id } = await  params
   const dateOptions = {
     year: 'numeric',

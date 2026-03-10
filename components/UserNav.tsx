@@ -29,7 +29,7 @@ export default function UserNav({ user, role }:{ user:any, role:string | null })
     return(
         <div className="relative ">
             {/* Notre boutton initiale  */}
-            <button onClick={() => setIsOpen(!isOpen)}  className={`h-10 w-10 rounded-full flex items-center justify-center font-bold shadow-md transition-all border-2 border-white ${
+            <button onClick={() => setIsOpen(!isOpen)}  className={`h-10 w-10 rounded-full flex items-center  text-white justify-center font-bold shadow-md transition-all border-2 border-white ${
                     role === 'admin' ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'}`}
             >
                 {initial}

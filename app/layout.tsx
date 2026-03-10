@@ -6,6 +6,7 @@ import { Toaster} from 'sonner'
 
 import {CityProvider} from '@/context/CityContext'
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,8 @@ export default function RootLayout({
       >
         <CityProvider>
             <Header />
-            {children}
+              <main className="min-h-screen"> {children} </main>
+            <Footer />
         </CityProvider>
         <Toaster position="top-right" richColors />
         

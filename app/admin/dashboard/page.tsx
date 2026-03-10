@@ -19,12 +19,12 @@ export default async function AdminDashboard() {
   // Récupération des données
   const { data: pendingEvents } = await supabase
     .from("events")
-    .select("*, profiles(email)")
+    .select("*,profiles(email)")
     .eq("status", "pending")
     .order("created_at", { ascending: false });
 
   const { count: totalEvents } = await supabase.from("events").select("*", { count: 'exact', head: true });
-  const { count: validatedCount } = await supabase.from("events").select("*", { count: 'exact', head: true }).eq("status", "validated");
+  const { count: validatedCount } = await supabase.from("events").select("*", { count: 'exact', head: true }).eq("status", "approved");
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-4 md:p-10">
@@ -70,6 +70,8 @@ export default async function AdminDashboard() {
       </div>
     </div>
   );
+
+  
 }
 
 // Petit sous-composant pour les stats
@@ -84,3 +86,4 @@ function StatCard({ title, value, icon, color }: any) {
     </div>
   );
 }
+

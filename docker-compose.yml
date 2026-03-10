@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  cityhub-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cityhub_prod_test
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    restart: always

@@ -223,3 +223,133 @@ VALUES
     '{"instagram": "https://ig.me/alexfood", "youtube": "AlexLyon"}',
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d'
 );
+
+// creation de Table Favoris 
+
+CREATE TABLE bookMarks(
+  id UUID DEFAULT lg_random
+
+)
+
+
+// Creation des RLS sur la table event Pour l admin  
+// l adminstrateur peuvent tous faire sur les evenement 
+// ALTER TABLE event ENABLE ROW LEVEL SECURITY ;
+
+CREATE POLICY " Les admin peuvent tout faire sur les evenements"
+ON event 
+FOR ALL
+TO authenticated
+USING(
+  -- on verifie si pour un utilisateur identifie si son role dans la table profil est admin 
+  EXISTS(
+    SELECT 1 FROM profiles
+    WHERE(
+      profiles.id = auth.uid() 
+      and 
+      profiles.role = 'admin'
+    )
+  )
+)
+-- creation d une police sur la table Event pour les utilisateurs authentifié . 
+CREATE POLICY " Les utilisateurs peuvent voir leurs propres events "
+ON events
+FOR SELECT 
+TO authenticated 
+USING(
+  auth.uid() = user_id
+)
+
+-- Creation d une police sur table event pour l admintrateur 
+
+CREATE POLICY " l administrateur peut voir tous les evenments "
+ON events 
+FOR SELECT 
+TO authenficated 
+USING(
+  EXIST(
+    SELECT 1 FROM profiles 
+    WHERE (auth.uid() = id  and role = 'admin')
+))
+WITH CHECK (
+   EXIST(
+    SELECT 1 FROM profiles 
+    WHERE (auth.uid() = id  and role = 'admin') 
+))
+
+-- Activation et Creation des RLS sur la tables 
+
+ALTER TABLE ENABLE ROW LEVEL SECURITY 
+
+CREATE POLICY " UN Administrateur  peut lire les information contenu dans les profiles"
+ON profiles 
+FOR SELECT 
+TO authenticated
+USING(
+  EXISTS(
+    SELECT 1 FROM profiles 
+    WHERE (
+      auth.uid() = id
+      and 
+      role = 'admin'
+    )
+  )
+)
+
+-- CREATION D'UN NOUVEAU TRIGGER POUR INSERER LES EMAILS 
+-- REMARQUE :si tu a un trigger deja definir le nouveau trigger ne prend par en compte ce que l ancien 
+-- faisait deja dont si tu prend en charge tout les colonnes definir dans ton precedent trigger il faut tous 
+-- les redefinir dans ton nouveau 
+-- le SECURITY DEFINER permet de contourner les regles RLS pour les  taches systemes automatique 
+-- new contient les donnees qui arrive et paradoxallement ,
+-- old contient les donnees avant la modification( utiles pour trigger update)
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, role, full_name)
+  VALUES (
+    new.id, 
+    new.email, 
+    'user', 
+    COALESCE(new.raw_user_meta_data->>'full_name', 'Nouvel Utilisateur'), -- Met un nom par défaut si vide
+  );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Apres avoir definir notre fonction qui retourne un trigger ( declenche un evenement )
+-- Il faut lancer cette evenement en lui donnant un nom on_auth_user_created
+-- Le nom donner a cette autautomatisme pour servir a le supprimer plutard 
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- vu que le nouveau trigger ne va qu impacter sur les donnees nouvellement entrant il va falloir ajouter 
+-- les donnees manuellement (email) dans notre BD 
+-- une alternative serait utiliser un Script qui le fait automatiquement 
+
+
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uid(),
+  name TEXT NOT NULL ,
+  age INTEGER NOT NULL,
+  created_at TIMETAMPSTZ DEFAULT now()
+)
+
+CREATE TABLE posts(
+  id  UUID PRIMARY KEY DEFAULT gen_random_uid()
+  title TEXT NOT NULL,
+  description TEXT NOT NULL ,
+  user_id UUID NOT NULL  REFERENCES users(id) ON DELETE CASCADE
+)
+
+ALTER TABLE profiles 
+ADD COLUMN email TEXT 
+
+// vu 
+
+UPDATE TABLE profile 
+set email = auth.users.email
+FROM auth.users

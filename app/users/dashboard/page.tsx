@@ -38,6 +38,8 @@ export default async  function DashboarUser() {
         console.error("Erreur Supabase:", error.message)
         return <div className="p-10 text-red-500">Une erreur est survenue lors du chargement.</div>
     } 
+    console.log(user.id)
+    console.log(events)
 
     const stats = {
     total: events?.length || 0,
@@ -146,4 +148,6 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
+
+
 
