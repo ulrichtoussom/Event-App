@@ -50,6 +50,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
+
+# AJOUTE CECI pour garantir que l'app accepte les connexions de Render
+ENV HOSTNAME "0.0.0.0"
+
 ENV PORT 3000
 
 # On lance le serveur via le fichier généré par le mode standalone
