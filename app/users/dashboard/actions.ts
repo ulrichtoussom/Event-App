@@ -14,7 +14,7 @@ const EventSchema = z.object({
   description: z.string()
     .min(10, "La description est trop courte"),
   category: z.enum(["comedy", "music", "food", "corporate", "lifestyle", "other"], {
-    errorMap: () => ({ message: "Veuillez choisir une catégorie valide" }),
+    error : " Veillez Choisir une categorie Valide  "
   }),
   date: z.string().refine((val) => new Date(val) > new Date(), {
     message: "La date doit être dans le futur",

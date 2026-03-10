@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import NextImage from 'next/image'
 import { useState } from 'react'
-import type {Events} from '@/type/type'
+import type { Events } from '@/types'
 
 export default function EventCard({ evt } : {evt:Events} ) {
 

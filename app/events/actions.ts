@@ -1,4 +1,4 @@
-
+/* 
 import { z } from 'zod'
 import { createClient } from '@/lib/server'
 
@@ -11,7 +11,8 @@ import { createClient } from '@/lib/server'
         description: z.string()
             .min(10, "La description est trop courte"),
         category: z.enum(["comedy", "music", "food", "corporate", "lifestyle", "other"], {
-            errorMap: () => ({ message: "Veuillez choisir une catégorie valide" }),
+            invalid_type_error: "Veuillez choisir une catégorie valide",
+            required_error: "La catégorie est obligatoire",
         }),
         date: z.string().refine((val) => new Date(val) > new Date(), {
             message: "La date doit être dans le futur",
@@ -33,6 +34,4 @@ export  async function PostNewEvent( formData : FormData) {
     }
 
 
-
-
-}
+} */

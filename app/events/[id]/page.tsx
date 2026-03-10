@@ -8,11 +8,11 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
 
   const supabase = await createClient()
   const { id } = await  params
-  const dateOptions = {
+  const dateOptions : Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month : 'long',
     day : 'numeric'
-  }
+  } 
   const { data: event, error } = await supabase
     .from('events')
     .select('*, cities(name)') // On récupère aussi le nom de la ville associée
@@ -34,7 +34,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
 
       {/* Hero Image */}
       <div className="relative h-[400px] w-full rounded-3xl overflow-hidden shadow-xl mb-8">
-        <Image 
+        <Image  
           src={event.image_url || 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4'} 
           alt={event.title}
           fill

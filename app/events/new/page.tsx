@@ -12,13 +12,23 @@ import { z } from 'zod'
 const eventSchema = z.object({
   title: z.string().min(5, "Le titre doit faire au moins 5 caractères"),
   description: z.string().min(10, "La description doit faire au moins 10 caractères"),
+  // CORRECTION ICI :
   category: z.enum(["comedy", "music", "food", "corporate", "lifestyle", "other"], {
-    errorMap: () => ({ message: "Veuillez choisir une catégorie valide" }),
-  }),
+    // Dans cette version de Zod, seul "error" ou "message" est accepté ici
+    error: "Veuillez choisir une catégorie valide"
+} as any), // Le "as any" ici est une issue de secours pour Docker
   eventDate: z.string().refine((date) => new Date(date) >= new Date(new Date().setHours(0,0,0,0)), {
     message: "La date ne peut pas être dans le passé",
   }),
 });
+
+/*
+  Alternative de z.enum pour la verifivation a le package Zod 
+    category: z.string().refine((val) => 
+      ["comedy", "music", "food", "corporate", "lifestyle", "other"].includes(val), 
+      { message: "Veuillez choisir une catégorie valide" }
+    ),
+*/
 
 export default function NewEventPage() {
   const { selectedCity } = useCity();
@@ -69,7 +79,8 @@ export default function NewEventPage() {
         if (!selectedFile) sethasError(true);
 
         result.error.issues.forEach((issue) => {
-          errors[issue.path[0]] = issue.message;
+          const fieldName = issue.path[0].toString()
+          errors[fieldName] = issue.message;
          });
 
         setFormErrors(errors);
@@ -81,6 +92,7 @@ export default function NewEventPage() {
         return toast.error("Veuillez ajouter une image !")
         
       }
+
       if (!selectedCity) return alert("Veuillez sélectionner une ville !");      
       
 

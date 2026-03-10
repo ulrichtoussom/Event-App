@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
     remotePatterns:[
       {
         protocol : 'https',
-        hostname : 'images.unsplash.com'
+        hostname : 'images.unsplash.com',
+        port: '',
+        pathname: '/**', // Ajoute ceci pour autoriser tous les chemins d'Unsplash
       },
       {
         protocol : 'https',
@@ -15,7 +17,7 @@ const nextConfig: NextConfig = {
       }
     ]
   },
-  output : 'standalone'
+  output : 'standalone' 
   /* config options here */
 };
 
