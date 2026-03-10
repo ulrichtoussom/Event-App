@@ -70,11 +70,11 @@ export default function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClo
 
           <form onSubmit={handleAuth} className="space-y-4">
             <input 
-              type="email" placeholder="Email" className="w-full px-5 py-3 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none"
+              type="email" placeholder="Email" className="w-full text-blue-900 sm:text-gray-500 px-5 py-3 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none"
               value={email} onChange={(e) => setEmail(e.target.value)} required 
             />
             <input 
-              type="password" placeholder="Mot de passe" className="w-full px-5 py-3 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none"
+              type="password" placeholder="Mot de passe" className="w-full text-blue-900  sm:text-gray-500  px-5 py-3 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none"
               value={password} onChange={(e) => setPassword(e.target.value)} required 
             />
 
