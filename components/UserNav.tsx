@@ -62,7 +62,7 @@ export default function UserNav({ user, role }:{ user:any, role:string | null })
                                             🛡️ Dashboard Modération
                                         </Link>
                                         <Link 
-                                            href="/admin/cities" 
+                                            href="#" 
                                             onClick={() => setIsOpen(false)}
                                             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition"
                                         >
