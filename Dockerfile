@@ -10,6 +10,15 @@ RUN npm install
 
 FROM node:20-alpine AS builder
 WORKDIR /app
+
+# On déclare les variables attendues pendant le build
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# On les transforme en variables d'environnement pour le processus 'npm run build'
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . . 
 # On désactive la télémétrie Next.js pendant le build
