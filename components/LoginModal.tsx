@@ -13,6 +13,7 @@ export default function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClo
   if (!isOpen) return null;
 
   // --- LOGIQUE AUTH ---
+  
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
