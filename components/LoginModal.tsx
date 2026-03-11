@@ -21,7 +21,13 @@ export default function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClo
 
     const { error } = isLoginView 
       ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password });
+      : await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+        // Cette ligne est MAGIQUE : elle s'adapte à l'endroit où tu es
+        emailRedirectTo: `${window.location.origin}/auth/callback`
+      }});
 
     if (error) {
       setError(error.message);

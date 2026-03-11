@@ -38,49 +38,49 @@ export default function AdminEventCard({ event }: { event: any }) {
     };
 
     
-
     return (
-       <div className="group relative bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex gap-6 hover:shadow-xl transition-all duration-300">
+       <div className="group relative bg-white rounded-[2rem] p-4 shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-4 md:gap-6 hover:shadow-xl transition-all duration-300">
+            
+            {/* Lien invisible pour voir le détail */}
+            <Link href={`/events/${event.id}`} className="absolute inset-0 z-10 rounded-[2rem]" />
 
-            <Link href={`/events/${event.id}`} className=" absolute inset-0 z-10 rounded-3xl" />
-
-            {/* 3. Image (on ajoute relative z-10 pour ne pas bloquer le clic si besoin, 
-                mais ici le lien est au-dessus donc l'image est juste décorative) */}
-            <div className="w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100 relative z-10 pointer-events-none">
-                <img src={event.image_url} alt="" className="w-full h-full object-cover" />
+            {/* Image : Carré fixe sur Desktop, Bannière sur Mobile */}
+            <div className="w-full sm:w-32 md:w-40 h-48 sm:h-32 md:h-40 rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100 relative z-10 pointer-events-none">
+                <img src={event.image_url} alt="" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
             </div>
 
-            {/* 4. Infos de l'event */}
-
-            <div className="flex-1 flex flex-col justify-between py-1 relative z-10 pointer-events-none">
-                <div>
-                    <div className="flex justify-between items-start mb-1">
-                        <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-md">
+            {/* Infos de l'event */}
+            <div className="flex-1 flex flex-col justify-between py-1 relative z-10">
+                <div className="pointer-events-none">
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-[9px] font-black uppercase px-2 py-1 bg-indigo-50 text-indigo-600 rounded-lg">
                             {event.category}
                         </span>
                         <span className="text-[10px] text-gray-400 font-medium">
-                            Reçu le {new Intl.DateTimeFormat('fr-FR').format(new Date(event.created_at))}
+                           {new Intl.DateTimeFormat('fr-FR').format(new Date(event.created_at))}
                         </span>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 line-clamp-1 mb-2">{event.title}</h3>
-                    <p className="text-xs text-gray-400 line-clamp-2 italic">{event.description}</p>
+                    <h3 className="text-base md:text-lg font-bold text-gray-900 line-clamp-1 mb-1">{event.title}</h3>
+                    <p className="text-xs text-gray-400 line-clamp-2 italic mb-4">{event.description}</p>
                 </div>
-                {/* 5. ZONE DES BOUTONS : Très important, on met 'relative z-20'  pour qu'ils soient AU-DESSUS du lien invisible */}
-                <div className="flex gap-3 mt-4 relative z-20">
+
+                {/* ZONE DES BOUTONS : z-20 pour être cliquable */}
+                <div className="flex gap-2 md:gap-3 mt-auto relative z-20">
                     <button 
                         onClick={(e) => {
-                            e.preventDefault(); // Empêche le lien de s'activer
-                            e.stopPropagation(); // Arrête la propagation vers le parent
+                            e.preventDefault();
+                            e.stopPropagation();
                             handleApprove();
                         }}
                         disabled={loading}
-                        className={`flex-1 flex items-center justify-center gap-2 py-2 text-white rounded-xl text-sm font-bold transition-all ${
-                            loading ? 'bg-green-300' : 'bg-green-500 hover:scale-105 shadow-lg shadow-green-100'
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs md:text-sm font-bold text-white transition-all ${
+                            loading ? 'bg-green-300' : 'bg-green-500 active:scale-95 shadow-lg shadow-green-100'
                         }`}
                     >
                         {loading ? <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" /> : <Check className="w-4 h-4" />}
                         {loading ? '...' : 'Approuver'}
                     </button>
+                    
                     <button 
                         onClick={(e) => {
                             e.preventDefault();
@@ -88,13 +88,13 @@ export default function AdminEventCard({ event }: { event: any }) {
                             handleReject();
                         }}
                         disabled={loading}
-                        className="px-4 py-2 bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-xl transition-all hover:scale-105"
+                        className="px-5 py-3 bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-xl transition-all active:scale-95 border border-transparent hover:border-red-100"
                     >
-                        <X className="w-4 h-4" />
+                        <X className="w-5 h-5" />
                     </button>
-
                 </div>
             </div> 
        </div>
-    );
+    )
+       
 }
